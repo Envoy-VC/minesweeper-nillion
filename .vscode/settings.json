@@ -8,5 +8,9 @@
   "[solidity]": {
     "editor.defaultFormatter": "NomicFoundation.hardhat-solidity"
   },
+  "[python]": {
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "ms-python.autopep8"
+	},
   "solidity.formatter": "forge"
 }
