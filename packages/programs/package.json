@@ -1,0 +1,13 @@
+{
+  "name": "minesweeper-programs",
+  "version": "0.0.1",
+  "description": "",
+  "main": "src/man.py",
+  "scripts": {
+    "start-devnet": "bash ./start-devnet.sh",
+    "create-venv": "bash ./create-venv.sh"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
