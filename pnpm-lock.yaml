@@ -20,6 +20,9 @@ importers:
       98.css:
         specifier: ^0.1.20
         version: 0.1.20
+      '@nillion/nillion-client-js-browser':
+        specifier: ^0.2.1
+        version: 0.2.1
       '@radix-ui/react-alert-dialog':
         specifier: ^1.0.5
         version: 1.0.5(@types/react-dom@18.3.0)(@types/react@18.3.1)(react-dom@18.2.0)(react@18.2.0)
@@ -92,6 +95,9 @@ importers:
       zod:
         specifier: ^3.23.3
         version: 3.23.5
+      zustand:
+        specifier: ^4.5.2
+        version: 4.5.2(@types/react@18.3.1)(react@18.2.0)
     devDependencies:
       '@trivago/prettier-plugin-sort-imports':
         specifier: ^4.3.0
@@ -2290,6 +2296,10 @@ packages:
     dependencies:
       eslint-scope: 5.1.1
     dev: true
+
+  /@nillion/nillion-client-js-browser@0.2.1:
+    resolution: {integrity: sha512-r5zfl9wKrgFG2FZgX7RY3QFwIl9Kf1clIPB9jA/P2sOwv1hyg7emJlTCRrpDR5BSVe7AZX3TUO51k5BLvC//vg==}
+    dev: false
 
   /@noble/curves@1.2.0:
     resolution: {integrity: sha512-oYclrNgRaM9SsBUBVbb8M6DTV7ZHRTKugureoYEncY5c65HOmRzvSiTE3y5CYaPYJA/GVkrhXEoF0M3Ya9PMnw==}
@@ -11118,6 +11128,26 @@ packages:
     peerDependencies:
       '@types/react': '>=16.8'
       immer: '>=9.0'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      immer:
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      '@types/react': 18.3.1
+      react: 18.2.0
+      use-sync-external-store: 1.2.0(react@18.2.0)
+    dev: false
+
+  /zustand@4.5.2(@types/react@18.3.1)(react@18.2.0):
+    resolution: {integrity: sha512-2cN1tPkDVkwCy5ickKrI7vijSjPksFRfqS6237NzT0vqSsztTNnQdHw9mmN7uBdk3gceVXU0a+21jFzFzAc9+g==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      '@types/react': '>=16.8'
+      immer: '>=9.0.6'
       react: '>=16.8'
     peerDependenciesMeta:
       '@types/react':

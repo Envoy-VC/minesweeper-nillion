@@ -6,7 +6,7 @@ Output will be a full board of numbers(576) with each tile having values.
 
 0/1           |  Game Over
 -1            |  Untouched Tile
-0 - 8         |  No of Adjacent Mines.
+0 - 8         |  No of Adjacent Mines
 9             |  Mine
 10            |  Flag
 
@@ -36,7 +36,7 @@ def is_valid(row: int, col: int) -> bool:
 
 def is_mine(board: list[list[SecretInteger]], row: int, col: int) -> bool:
     ele: SecretInteger = board[row][col]
-    if ele.public_equals(SecretInteger(9)):
+    if ele == SecretInteger(9):
         return True
     return False
 
@@ -48,8 +48,9 @@ def count_adjacent_mines(board: list[list[SecretInteger]], row: int, col: int):
     for i in range(8):
         newRow = row + dx[i]
         newCol = col + dy[i]
-        if (is_mine(board, newRow, newCol)):
-            count += 1
+        if (is_valid(newRow, newCol)):
+            if (is_mine(board, newRow, newCol)):
+                count += 1
     return count
 
 
@@ -57,14 +58,14 @@ def is_game_over(board: list[list[SecretInteger]]) -> bool:
     # game over if there is not tile with -1
     for i in range(24):
         for j in range(24):
-            if board[i][j].public_equals(SecretInteger(-1)):
+            if board[i][j] == SecretInteger(-1):
                 return 0
     return 1
 
 
 def make_move(board: list[list[SecretInteger]], row: int, col: int):
     # Base Recursive Case
-    if (board[row][col].public_equals(SecretInteger(-1)).__eq__(PublicBoolean(False))):
+    if (not board[row][col] == SecretInteger(-1)):
         return board
 
     # Calculate the number of adjacent mines and put it on the board
@@ -119,13 +120,13 @@ def nada_main():
             SecretInteger(Input(name="mine-x-" + str(i), party=party1)),
             SecretInteger(Input(name="mine-x-" + str(i), party=party1))
         ]
-        x, y = -1, -1
-        for i in range(24):
-            if (mine_locations[i][0].public_equals(SecretInteger(i))):
-                x = i
-            if (mine_locations[i][1].public_equals(SecretInteger(i))):
-                y = i
 
+    for i in range(24):
+        x, y = -1, -1
+        if (mine_locations[i][0].public_equals(SecretInteger(i))):
+            x = i
+        if (mine_locations[i][1].public_equals(SecretInteger(i))):
+            y = i
         mine_locations_int.append([x, y])
 
     # Take Board from Party 2
