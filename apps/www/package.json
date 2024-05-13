@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "98.css": "^0.1.20",
+    "@nillion/nillion-client-js-browser": "^0.2.1",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-slot": "^1.0.2",
@@ -35,7 +36,8 @@
     "usehooks-ts": "^3.1.0",
     "viem": "^2.9.31",
     "wagmi": "^2.7.1",
-    "zod": "^3.23.3"
+    "zod": "^3.23.3",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
