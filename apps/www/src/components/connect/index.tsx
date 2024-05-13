@@ -7,7 +7,6 @@ import BigNumber from 'bignumber.js';
 import {
   useAccount,
   useBalance,
-  useChainId,
   useChains,
   useEnsAvatar,
   useEnsName,

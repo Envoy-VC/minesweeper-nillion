@@ -2,7 +2,7 @@ import { headers } from 'next/headers';
 
 import { wagmiConfig } from '~/lib/viem';
 
-import { GeistSans } from 'geist/font/sans';
+import '98.css';
 import type { Metadata } from 'next';
 import { cookieToInitialState } from 'wagmi';
 import { Web3Provider } from '~/providers';
@@ -28,7 +28,11 @@ export default function RootLayout({
 
   return (
     <html lang='en'>
-      <body className={`font-sans ${GeistSans.variable}`}>
+      <body
+        style={{
+          fontFamily: 'Pixelated MS Sans Serif',
+        }}
+      >
         <Web3Provider initialState={initialState}>{children}</Web3Provider>
         <Toaster />
       </body>

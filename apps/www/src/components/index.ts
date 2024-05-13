@@ -1,3 +1,3 @@
-import Navbar from './navbar';
+import ConnectButton from './connect';
 
-export { Navbar };
+export { ConnectButton };

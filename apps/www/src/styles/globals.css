@@ -74,3 +74,15 @@
     @apply bg-background text-foreground;
   }
 }
+
+.winCl-wrap {
+  @apply mr-2.5 inline border border-solid border-black pb-[3px] pt-px;
+  background: #c6c6c6;
+}
+.winCl-btn {
+  @apply border-b border-l border-r border-t border-solid border-b-[#848484] border-l-white border-r-[#848484] border-t-white bg-transparent px-[15px] py-[3px] font-medium active:border-b active:border-l active:border-r active:border-t active:border-solid active:border-b-white active:border-l-[#848484] active:border-r-white active:border-t-[#848484];
+}
+.winCl-btn:hover,
+.winCl-btn:focus {
+  outline: 0;
+}
