@@ -17,3 +17,8 @@ export interface PaymentsConfig {
   smart_contract_addresses: SmartContractAddresses;
   signer: Signer;
 }
+
+export interface JsInput {
+  name: string;
+  value: string;
+}

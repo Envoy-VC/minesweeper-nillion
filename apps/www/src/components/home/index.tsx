@@ -5,11 +5,14 @@ import Link from 'next/link';
 
 import React from 'react';
 
+import { useNillion } from '~/lib/hooks';
+
 import { LogoText } from '~/assets';
 
 import { ArrowRight } from 'lucide-react';
 
 const HomeSection = () => {
+  const { userKey, connectionStatus, connectAsync } = useNillion();
   const [joinStatus, setJoinStatus] = React.useState<
     'idle' | 'active' | 'joining'
   >('idle');
@@ -59,6 +62,18 @@ const HomeSection = () => {
             </div>
           </div>
         )}
+        <button
+          className='px-6 py-1 text-base font-medium'
+          onClick={async () => {
+            if (connectionStatus === 'success' && !userKey) return;
+            await connectAsync();
+          }}
+        >
+          {connectionStatus === 'success' &&
+            !!userKey &&
+            `Connected ${userKey.slice(0, 3)}...${userKey.slice(-3)}`}
+          {!userKey && `Connect to Nillion`}
+        </button>
       </div>
     </div>
   );
