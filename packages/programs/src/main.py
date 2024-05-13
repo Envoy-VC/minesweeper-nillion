@@ -118,7 +118,7 @@ def nada_main():
     for i in range(24):
         mine_locations[i] = [
             SecretInteger(Input(name="mine-x-" + str(i), party=party1)),
-            SecretInteger(Input(name="mine-x-" + str(i), party=party1))
+            SecretInteger(Input(name="mine-y-" + str(i), party=party1))
         ]
 
     for i in range(24):
