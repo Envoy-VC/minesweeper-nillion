@@ -15,7 +15,7 @@ const HomeSection = () => {
   >('idle');
 
   return (
-    <div className='flex h-full w-full flex-col items-center justify-start p-12'>
+    <div className='flex h-[24rem] w-full flex-col items-center justify-start px-12 py-24'>
       <Image
         src={LogoText as unknown as string}
         alt='Logo'
