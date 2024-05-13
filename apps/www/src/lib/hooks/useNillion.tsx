@@ -2,9 +2,11 @@ import React from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 
+import { getNillionClient, storeProgram } from '../nillion';
+
 const useNillion = () => {
   const {
-    data: userKey,
+    data,
     status: connectionStatus,
     refetch,
   } = useQuery({
@@ -12,7 +14,21 @@ const useNillion = () => {
     enabled: false,
     queryFn: async () => {
       const data = await connectAsync();
-      return data.user_key;
+
+      if (data.user_key) {
+        const { nillion, nillionClient } = await getNillionClient(
+          data.user_key
+        );
+
+        const programId = await storeProgram(nillionClient, 'main');
+
+        return {
+          programId,
+          nillion,
+          nillionClient,
+          user_key: data.user_key,
+        };
+      }
     },
   });
   const connectAsync = async () => {
@@ -57,7 +73,14 @@ const useNillion = () => {
     }
   };
 
-  return { userKey, connectionStatus, connectAsync: refetch };
+  return {
+    userKey: data?.user_key,
+    connectionStatus,
+    connectAsync: refetch,
+    nillion: data?.nillion,
+    client: data?.nillionClient,
+    program_id: data?.programId,
+  };
 };
 
 export default useNillion;

@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import React from 'react';
 
@@ -12,10 +13,19 @@ import { LogoText } from '~/assets';
 import { ArrowRight } from 'lucide-react';
 
 const HomeSection = () => {
+  const router = useRouter();
   const { userKey, connectionStatus, connectAsync } = useNillion();
   const [joinStatus, setJoinStatus] = React.useState<
     'idle' | 'active' | 'joining'
   >('idle');
+
+  const [id, setId] = React.useState<string>('');
+
+  const onJoin = async () => {
+    try {
+      router.push(`/game/${id}`);
+    } catch (error) {}
+  };
 
   return (
     <div className='flex h-[24rem] w-full flex-col items-center justify-start px-12 py-24'>
@@ -52,10 +62,12 @@ const HomeSection = () => {
               <input
                 id='text17'
                 type='text'
+                value={id}
+                onChange={(e) => setId(e.target.value)}
                 className='!h-6 w-full text-base'
               />
               <div className='title-bar-controls'>
-                <button className='m-0 h-5 w-5 p-0'>
+                <button className='m-0 h-5 w-5 p-0' onClick={onJoin}>
                   <ArrowRight className='mx-auto text-black' size={14} />
                 </button>
               </div>

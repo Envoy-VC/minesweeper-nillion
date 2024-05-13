@@ -2,17 +2,16 @@ import { nillionConfig } from './config';
 
 import type { JsInput } from '~/types/nillion';
 
-export async function storeSecretsInteger(
+const storeMines = async (
   nillion: any,
   nillionClient: any,
   secretsToStore: JsInput[],
   program_id: string,
-  party_name: string,
   usersWithRetrievePermissions: string[] = [],
   usersWithUpdatePermissions: string[] = [],
   usersWithDeletePermissions: string[] = [],
   usersWithComputePermissions: string[] = []
-): Promise<string> {
+): Promise<string> => {
   try {
     const secrets = new nillion.Secrets();
 
@@ -21,15 +20,8 @@ export async function storeSecretsInteger(
       secrets.insert(secret.name, newSecret);
     }
 
-    const secret_program_bindings = new nillion.ProgramBindings(program_id);
-    const party_id = nillionClient.party_id;
-    secret_program_bindings.add_input_party(party_name, party_id);
-
     const user_id = nillionClient.user_id;
-    const permissions = nillion.Permissions.default_for_user(
-      user_id,
-      program_id
-    );
+    const permissions = nillion.Permissions.default_for_user(user_id);
 
     const computePermissions: { [key: string]: string[] } = {};
     for (const user of usersWithComputePermissions) {
@@ -44,7 +36,7 @@ export async function storeSecretsInteger(
     const store_id = await nillionClient.store_secrets(
       nillionConfig.cluster_id,
       secrets,
-      secret_program_bindings,
+      null,
       permissions
     );
     return store_id;
@@ -52,4 +44,6 @@ export async function storeSecretsInteger(
     console.log(error);
     return 'error';
   }
-}
+};
+
+export default storeMines;

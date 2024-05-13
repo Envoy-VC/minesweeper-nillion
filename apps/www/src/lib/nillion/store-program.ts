@@ -1,6 +1,6 @@
 import { nillionConfig } from './config';
 
-export async function storeProgram(nillionClient: any, programName: string) {
+const storeProgram = async (nillionClient: any, programName: string) => {
   try {
     const compiledProgram = await fetch(`/programs/${programName}.nada.bin`);
 
@@ -15,9 +15,12 @@ export async function storeProgram(nillionClient: any, programName: string) {
 
     const userId = nillionClient.user_id as string;
     const programId = `${userId}/${programName}`;
+    console.log(programId);
     return programId;
   } catch (error) {
     console.log(error);
     return 'error';
   }
-}
+};
+
+export default storeProgram;
