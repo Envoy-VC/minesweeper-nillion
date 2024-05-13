@@ -13,7 +13,7 @@ const BOARD_ROWS = 24;
 const BOARD_COLS = 24;
 
 const CreateBoard = () => {
-  const [remaining, setRemaining] = React.useState(24);
+  const [remaining, setRemaining] = React.useState(42);
   const [open, setOpen] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | null>(null);
   const [mines, actions] = useMap<string, boolean>();
