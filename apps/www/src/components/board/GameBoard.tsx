@@ -20,12 +20,13 @@ const GameBoard = ({ mines }: Props) => {
   const { board } = useGameStore();
   const { makeMove } = useGame();
 
+  const mineKeys = mines.map((value) => `${value[0] - 1}-${value[1] - 1}`);
+
   const play = async (row: number, col: number) => {
     try {
       const inputs: JsInput[] = [];
-      const boardInputs = getBoardInputs(board);
       const minesInputs = getMinesInputs(mines);
-      inputs.push(...boardInputs, ...minesInputs);
+      inputs.push(...minesInputs);
       inputs.push({
         name: `location-0`,
         value: String(row + 1),
@@ -33,6 +34,9 @@ const GameBoard = ({ mines }: Props) => {
       inputs.push({
         name: `location-1`,
         value: String(col + 1),
+      });
+      console.log({
+        inputs,
       });
       const res = await makeMove(inputs);
       console.log(res);
@@ -46,20 +50,20 @@ const GameBoard = ({ mines }: Props) => {
       <div className='relative'>
         {board.map((row, rowIdx) => (
           <div key={rowIdx} className='flex'>
-            {row.map((ele, colIdx) => {
-              const type = ele;
+            {row.map((_, colIdx) => {
               const key = `${rowIdx}-${colIdx}`;
+              const isMine = mineKeys.includes(key);
               return (
                 <div
-                  className='cursor-pointer'
+                  className='relative cursor-pointer'
                   key={`tile-${key}`}
                   onClick={async () => {
-                    console.log('Playing', rowIdx, colIdx);
                     await play(rowIdx, colIdx);
                   }}
                 >
+                  <div className='absolute'>{isMine && '*'}</div>
                   <Image
-                    src={TILES.default}
+                    src={isMine ? TILES.mine : TILES.default}
                     alt='Default Tile'
                     className='h-[24px] w-[24px]'
                   />

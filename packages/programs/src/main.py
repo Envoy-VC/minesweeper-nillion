@@ -1,6 +1,6 @@
 from nada_dsl import *
 
-BOARD_SIZE = 2
+BOARD_SIZE = 24
 
 valid = Integer(1)
 invalid = Integer(0)
@@ -56,22 +56,25 @@ def count_adjacent_mines(
     return count
 
 
-def getResult(board, mine_locations, location):
-    result = Integer(0)
-    for i in range(BOARD_SIZE):
-        result += mine_locations[i][0] + mine_locations[i][1]
-        for j in range(BOARD_SIZE):
-            result += board[i][j]
+def make_move(
+    mine_locations: list[list[SecretInteger]],
+    row: SecretInteger,
+    col: SecretInteger
+) -> list[Output]:
+    outputs: list[Output] = []
+    count = count_adjacent_mines(mine_locations, row, col)
+    game_over = is_mine(mine_locations, row, col)
 
-    result += location[0] + location[1]
-    return result
+    outputs.append(Output(count, "adjacent_mines", Party("Party1")))
+    outputs.append(Output(game_over, "game_over", Party("Party1")))
+
+    return outputs
 
 
 def nada_main():
     party1 = Party(name="Party1")
     party2 = Party(name="Party2")
 
-    board: list[list[SecretInteger]] = []
     mine_locations: list[list[SecretInteger]] = []
     location: list[SecretInteger] = []
 
@@ -83,25 +86,12 @@ def nada_main():
         mine_locations[i].append(SecretInteger(
             Input(name="mine-y-" + str(i), party=party1)))
 
-    # Take Board from Party 2
-    for i in range(BOARD_SIZE):
-        board.append([])
-        for j in range(BOARD_SIZE):
-            board[i].append(SecretInteger(
-                Input(name="board-" + str(i) + "-" + str(j), party=party2)))
-
     # Take Input Location from Party 2
     for i in range(2):
         location.append(SecretInteger(
             Input(name=f"location-{i}", party=party2)))
 
-    result = getResult(board, mine_locations, location)
-
-    outputs: list[Output] = []
-    outputs.append(Output(result, "out", party1))
-
-    res = count_adjacent_mines(mine_locations, location[0], location[1])
-
-    outputs.append(Output(res, "m1", party1))
+    outputs: list[Output] = make_move(
+        mine_locations, row=location[0], col=location[1])
 
     return outputs

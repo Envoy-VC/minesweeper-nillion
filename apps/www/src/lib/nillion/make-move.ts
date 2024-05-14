@@ -19,7 +19,8 @@ const compute = async (
     const party2Name = 'Party2';
     const party1_id = nillionClient.party_id;
     program_bindings.add_input_party(party1Name, party1_id);
-    program_bindings.add_output_party(party2Name, party2_id);
+    program_bindings.add_input_party(party2Name, party2_id);
+    program_bindings.add_output_party(party1Name, party1_id);
 
     // create a compute time secrets object
     const compute_time_secrets = new nillion.Secrets();

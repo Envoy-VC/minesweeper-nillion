@@ -48,7 +48,7 @@ const GamePage = () => {
         </div>
       )}
       {mines && (
-        <div>
+        <div className='flex items-center justify-center'>
           <GameBoard mines={mines} />
         </div>
       )}
