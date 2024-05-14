@@ -1,17 +1,22 @@
 import React from 'react';
 
 import { useQuery } from '@tanstack/react-query';
+import { useLocalStorage } from 'usehooks-ts';
 
 import { getNillionClient, storeProgram } from '../nillion';
 
 const useNillion = () => {
+  const [programId, setProgramId] = useLocalStorage<string | undefined>(
+    'programId',
+    undefined
+  );
+
   const {
     data,
     status: connectionStatus,
     refetch,
   } = useQuery({
     queryKey: ['nillion_snap'],
-    enabled: false,
     queryFn: async () => {
       const data = await connectAsync();
 
@@ -20,10 +25,12 @@ const useNillion = () => {
           data.user_key
         );
 
-        const programId = await storeProgram(nillionClient, 'main');
+        if (programId == undefined) {
+          const program_id = await storeProgram(nillionClient, 'main');
+          setProgramId(program_id);
+        }
 
         return {
-          programId,
           nillion,
           nillionClient,
           user_key: data.user_key,
@@ -79,7 +86,7 @@ const useNillion = () => {
     connectAsync: refetch,
     nillion: data?.nillion,
     client: data?.nillionClient,
-    program_id: data?.programId,
+    program_id: programId,
   };
 };
 

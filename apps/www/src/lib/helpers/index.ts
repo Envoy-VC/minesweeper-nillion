@@ -2,7 +2,7 @@ export const getRandomMineLocations = () => {
   const mines: string[] = [];
 
   const taken = new Map<string, boolean>();
-  while (mines.length < 36) {
+  while (mines.length < 24) {
     const array = new Uint32Array(10);
     const bytes = crypto.getRandomValues(array);
     const randomX = bytes[0]! % 24;

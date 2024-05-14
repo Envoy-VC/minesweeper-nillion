@@ -5,6 +5,10 @@ const config = {
   webpack: (config) => {
     config.resolve.fallback = { fs: false, net: false, tls: false };
     config.externals.push('pino-pretty', 'lokijs', 'encoding');
+    config.experiments = {
+      asyncWebAssembly: true,
+      layers: true,
+    };
     return config;
   },
   async headers() {

@@ -15,8 +15,6 @@ const storeMines = async (
   usersWithComputePermissions: string[] = []
 ): Promise<string> => {
   try {
-    const admin = UserKey.from_seed('admin');
-    const admin_pub_k = admin.public_key();
     const secrets = new nillion.Secrets();
 
     for (const secret of secretsToStore) {
@@ -25,6 +23,7 @@ const storeMines = async (
     }
 
     const user_id = nillionClient.user_id;
+    console.log('User id: ' + user_id);
     const permissions = nillion.Permissions.default_for_user(user_id);
 
     const computePermissions: { [key: string]: string[] } = {};
@@ -33,12 +32,13 @@ const storeMines = async (
     }
 
     permissions.add_compute_permissions(computePermissions);
-    permissions.add_retrieve_permissions([
-      ...usersWithRetrievePermissions,
-      admin_pub_k,
-    ]);
+    permissions.add_retrieve_permissions(usersWithRetrievePermissions);
     permissions.add_update_permissions(usersWithUpdatePermissions);
     permissions.add_delete_permissions(usersWithDeletePermissions);
+
+    console.log(
+      permissions.is_retrieve_allowed(usersWithRetrievePermissions[0])
+    );
 
     const store_id = await nillionClient.store_secrets(
       nillionConfig.cluster_id,

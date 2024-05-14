@@ -20,7 +20,7 @@ import type { JsInput } from '~/types/nillion';
 
 const BOARD_ROWS = 24;
 const BOARD_COLS = 24;
-const MINES_COUNT = 36;
+const MINES_COUNT = 24;
 
 const CreateBoard = () => {
   const [, copy] = useCopyToClipboard();
@@ -59,8 +59,14 @@ const CreateBoard = () => {
         }
       });
       minesArr.forEach((mine, index) => {
-        nillionInput.push({ name: `mine-x-${index}`, value: mine.row });
-        nillionInput.push({ name: `mine-y-${index}`, value: mine.column });
+        nillionInput.push({
+          name: `mine-x-${index}`,
+          value: String(parseInt(mine.row) + 1),
+        });
+        nillionInput.push({
+          name: `mine-y-${index}`,
+          value: String(parseInt(mine.column) + 1),
+        });
       });
 
       const store_id = await storeBoard(nillionInput);

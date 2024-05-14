@@ -8,6 +8,7 @@ import React from 'react';
 
 import { useNillion } from '~/lib/hooks';
 
+import { useLocalStorage } from 'usehooks-ts';
 import { LogoText } from '~/assets';
 
 import { ArrowRight } from 'lucide-react';
@@ -23,7 +24,7 @@ const HomeSection = () => {
 
   const onJoin = async () => {
     try {
-      router.push(`/game/${id}`);
+      router.push(`/game?id=${id}`);
     } catch (error) {}
   };
 
