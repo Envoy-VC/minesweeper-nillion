@@ -28,7 +28,7 @@ S.W--> South-West   (row+1, col-1)
 """
 
 
-BOARD_SIZE = 16
+BOARD_SIZE = 3
 
 
 def is_valid(row: int, col: int) -> bool:
@@ -91,39 +91,38 @@ def make_move(board: list[list[SecretInteger]], row: int, col: int):
 
 
 def nada_main():
-   # Party 1 places Mines
+    # Party 1 places Mines
     party1 = Party(name="Party1")
     # Party 2 Minesweepes the board.
     party2 = Party(name="Party2")
 
     board: list[list[SecretInteger]] = []
     mine_locations: list[list[SecretInteger]] = []
-    mine_locations_int: list[list[int]] = []
+    mine_locations_int: list[list[int]] = [[-1, -1] for i in range(BOARD_SIZE)]
     location: list[SecretInteger] = []
 
     # Take 24 Mine Locations by Party 1
     for i in range(BOARD_SIZE):
         mine_locations.append([])
-        mine_locations_int.append([-1, -1])
         mine_locations[i].append(SecretInteger(
             Input(name="mine-x-" + str(i), party=party1)))
         mine_locations[i].append(SecretInteger(
             Input(name="mine-y-" + str(i), party=party1)))
-
-    for i in range(BOARD_SIZE):
-        x, y = -1, -1
-        if (mine_locations[i][0] == SecretInteger(i + 1)):
-            x = i
-        if (mine_locations[i][1] == SecretInteger(i + 1)):
-            y = i
-        mine_locations_int.append([x, y])
 
     # Take Board from Party 2
     for i in range(BOARD_SIZE):
         board.append([])
         for j in range(BOARD_SIZE):
             board[i].append(SecretInteger(
-                Input(name="board-" + str(i) + "-" + str(j), party=party1)))
+                Input(name="board-" + str(i) + "-" + str(j), party=party2)))
+
+    # for i in range(BOARD_SIZE):
+    #     x, y = -1, -1
+    #     if (mine_locations[i][0] == SecretInteger(i + 1)):
+    #         x = i
+    #     if (mine_locations[i][1] == SecretInteger(i + 1)):
+    #         y = i
+    #     mine_locations_int.append([x, y])
 
     # Add Mines Location to Board
     for i in range(BOARD_SIZE):
