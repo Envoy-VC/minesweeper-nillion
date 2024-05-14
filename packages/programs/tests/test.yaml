@@ -2,31 +2,31 @@
 program: main
 inputs:
   secrets:
-    board-1-0:
-      SecretInteger: '3'
-    board-1-2:
-      SecretInteger: '3'
-    board-0-2:
-      SecretInteger: '3'
-    board-0-1:
-      SecretInteger: '3'
-    board-1-1:
-      SecretInteger: '3'
     board-0-0:
-      SecretInteger: '3'
+      SecretInteger: '-1'
+    board-0-1:
+      SecretInteger: '-1'
+    board-1-0:
+      SecretInteger: '-1'
+    board-1-1:
+      SecretInteger: '-1'
+    mine-x-0:
+      SecretInteger: '1'
+    mine-y-0:
+      SecretInteger: '1'
+    mine-x-1:
+      SecretInteger: '2'
+    mine-y-1:
+      SecretInteger: '2'
+    location-0:
+      SecretInteger: '1'
+    location-1:
+      SecretInteger: '2'
   public_variables: {}
 expected_outputs:
-  game_over:
-    Integer: '3'
-  out-board-0-1:
-    SecretInteger: '3'
-  out-board-1-1:
-    SecretInteger: '3'
-  out-board-0-2:
-    SecretInteger: '3'
-  out-board-1-0:
-    SecretInteger: '3'
-  out-board-1-2:
-    SecretInteger: '3'
-  out-board-0-0:
-    SecretInteger: '3'
+  out:
+    SecretInteger: '5'
+  m1:
+    SecretInteger: '5'
+  m2:
+    SecretInteger: '5'

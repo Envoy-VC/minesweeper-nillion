@@ -1,107 +1,81 @@
 from nada_dsl import *
 
+BOARD_SIZE = 2
 
-"""
-Output will be a full board of numbers(576) with each tile having values.
+valid = Integer(1)
+invalid = Integer(0)
 
--1/1           |  Game Over
--1            |  Untouched Tile
-1 - 8         |  No of Adjacent Mines
-10             |  Mine
-11            |  Flag
-
-
-
-dx = [-1, -1, -1, 0, 0, 1, 1, 1]
-dy = [-1, 0, 1, -1, 1, -1, 0, 1]
+dx = [Integer(-1), Integer(-1), Integer(-1), Integer(0),
+      Integer(0), Integer(1), Integer(1), Integer(1)]
+dy = [Integer(-1), Integer(0), Integer(1), Integer(-1),
+      Integer(1), Integer(-1), Integer(0), Integer(1)]
 
 
-N -->  North        (row-1, col)
-S -->  South        (row+1, col)
-E -->  East         (row, col+1)
-W -->  West            (row, col-1)
-N.E--> North-East   (row-1, col+1)
-N.W--> North-West   (row-1, col-1)
-S.E--> South-East   (row+1, col+1)
-S.W--> South-West   (row+1, col-1)
+def is_mine(
+    mine_locations: list[list[SecretInteger]],
+    row: SecretInteger, col: SecretInteger
+) -> SecretInteger:
+    result = Integer(-1)
+    for mine in mine_locations:
+        result = result * ((row * Integer(100) + col) -
+                           (mine[0] * Integer(100) + mine[1]))
 
-"""
-
-
-BOARD_SIZE = 3
-
-
-def is_valid(row: int, col: int) -> bool:
-    if row >= 0 and row < BOARD_SIZE and col >= 0 and col < BOARD_SIZE:
-        return True
-    return False
+    res = (result > Integer(0)).if_else(
+        invalid, (result < Integer(0)).if_else(invalid, valid))
+    return res
 
 
-def is_mine(board: list[list[SecretInteger]], row: int, col: int) -> bool:
-    ele: SecretInteger = board[row][col]
-    if ele == SecretInteger(10):
-        return True
-    return False
+def is_valid(row: SecretInteger, col: SecretInteger) -> SecretInteger:
+    valid_row_max = row < Integer(BOARD_SIZE)
+    valid_row_min = row > Integer(0)
+    valid_col_max = col < Integer(BOARD_SIZE)
+    valid_col_min = col > Integer(0)
+
+    cmp_row_max = valid_row_max.if_else(valid, invalid)
+    cmp_row_min = valid_row_min.if_else(valid, invalid)
+    cmp_col_max = valid_col_max.if_else(valid, invalid)
+    cmp_col_min = valid_col_min.if_else(valid, invalid)
+
+    res = cmp_row_max * cmp_row_min * cmp_col_max * cmp_col_min
+    return res
 
 
-def count_adjacent_mines(board: list[list[SecretInteger]], row: int, col: int):
-    count = 0
-    dx = [-1, -1, -1, 0, 0, 1, 1, 1]
-    dy = [-1, 0, 1, -1, 1, -1, 0, 1]
+def count_adjacent_mines(
+    mine_locations: list[list[SecretInteger]],
+    row: SecretInteger,
+    col: SecretInteger
+) -> SecretInteger:
+    count = Integer(1)
     for i in range(8):
         newRow = row + dx[i]
         newCol = col + dy[i]
-        if (is_valid(newRow, newCol)):
-            if (is_mine(board, newRow, newCol)):
-                count += 1
-    return count + 1
+        valid = is_valid(newRow, newCol)
+        mine = is_mine(mine_locations, newRow, newCol)
+        count = count + (Integer(1) * valid * mine)
+
+    return count
 
 
-def is_game_over(board: list[list[SecretInteger]]) -> bool:
-    # game over if there is not tile with -1
+def getResult(board, mine_locations, location):
+    result = Integer(0)
     for i in range(BOARD_SIZE):
+        result += mine_locations[i][0] + mine_locations[i][1]
         for j in range(BOARD_SIZE):
-            if board[i][j] == SecretInteger(-1):
-                return 0
-    return 1
+            result += board[i][j]
 
-
-def make_move(board: list[list[SecretInteger]], row: int, col: int):
-    # Base Recursive Case
-    if (not board[row][col] == SecretInteger(-1)):
-        return board
-
-    # Calculate the number of adjacent mines and put it on the board
-    mine_count = count_adjacent_mines(board, row, col)
-    board[row][col] = SecretInteger(mine_count)
-
-    # Recursive Case
-    if (mine_count == 1):
-        # Recursive call for all adjacent
-        dx = [-1, -1, -1, 0, 0, 1, 1, 1]
-        dy = [-1, 0, 1, -1, 1, -1, 0, 1]
-        for i in range(8):
-            newRow = row + dx[i]
-            newCol = col + dy[i]
-            if (is_valid(newRow, newCol)):
-                if (not is_mine(board, newRow, newCol)):
-                    make_move(board, newRow, newCol)
-
-    return board
+    result += location[0] + location[1]
+    return result
 
 
 def nada_main():
-    # Party 1 places Mines
     party1 = Party(name="Party1")
-    # Party 2 Minesweepes the board.
     party2 = Party(name="Party2")
 
     board: list[list[SecretInteger]] = []
     mine_locations: list[list[SecretInteger]] = []
-    mine_locations_int: list[list[int]] = [[-1, -1] for i in range(BOARD_SIZE)]
     location: list[SecretInteger] = []
 
-    # Take 24 Mine Locations by Party 1
+    # Take Mine Locations from Party 1
     for i in range(BOARD_SIZE):
         mine_locations.append([])
         mine_locations[i].append(SecretInteger(
@@ -116,40 +90,18 @@ def nada_main():
             board[i].append(SecretInteger(
                 Input(name="board-" + str(i) + "-" + str(j), party=party2)))
 
-    for i in range(BOARD_SIZE):
-        x, y = -1, -1
-        if (mine_locations[i][0] == SecretInteger(i + 1)):
-            x = i
-        if (mine_locations[i][1] == SecretInteger(i + 1)):
-            y = i
-        mine_locations_int.append([x, y])
-
-    # Add Mines Location to Board
-    for i in range(BOARD_SIZE):
-        [mine_x, mine_y] = mine_locations_int[i]
-        board[mine_x][mine_y] = SecretInteger(10)
-
     # Take Input Location from Party 2
     for i in range(2):
         location.append(SecretInteger(
             Input(name=f"location-{i}", party=party2)))
 
-    x, y = -1, -1
-    for i in range(BOARD_SIZE):
-        if (location[0] == SecretInteger(i + 1)):
-            x = i
-        if (location[1] == SecretInteger(i + 1)):
-            y = i
+    result = getResult(board, mine_locations, location)
 
-    updated_board = make_move(board, x, y)
-    game_over = is_game_over(updated_board)
-    outputs: list[Output] = [
-        Output(Integer(game_over), "game_over", party1)
-    ]
+    outputs: list[Output] = []
+    outputs.append(Output(result, "out", party1))
 
-    for i in range(BOARD_SIZE - 1):
-        for j in range(BOARD_SIZE):
-            outputs.append(
-                Output(updated_board[i][j], "out-board-" + str(i) + "-" + str(j), party1))
+    res = count_adjacent_mines(mine_locations, location[0], location[1])
+
+    outputs.append(Output(res, "m1", party1))
 
     return outputs
