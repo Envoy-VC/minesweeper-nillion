@@ -1,3 +1,5 @@
+import { UserKey } from '@nillion/nillion-client-js-browser';
+
 import { nillionConfig } from './config';
 
 import type { JsInput } from '~/types/nillion';
@@ -13,6 +15,8 @@ const storeMines = async (
   usersWithComputePermissions: string[] = []
 ): Promise<string> => {
   try {
+    const admin = UserKey.from_seed('admin');
+    const admin_pub_k = admin.public_key();
     const secrets = new nillion.Secrets();
 
     for (const secret of secretsToStore) {
@@ -29,7 +33,10 @@ const storeMines = async (
     }
 
     permissions.add_compute_permissions(computePermissions);
-    permissions.add_retrieve_permissions(usersWithRetrievePermissions);
+    permissions.add_retrieve_permissions([
+      ...usersWithRetrievePermissions,
+      admin_pub_k,
+    ]);
     permissions.add_update_permissions(usersWithUpdatePermissions);
     permissions.add_delete_permissions(usersWithDeletePermissions);
 

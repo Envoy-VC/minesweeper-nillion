@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { storeMines } from '../nillion';
+import { compute, storeMines } from '../nillion';
 import useNillion from './useNillion';
 
 import type { JsInput } from '~/types/nillion';
@@ -13,7 +13,13 @@ const useGame = () => {
     const res = await storeMines(nillion, client, mines, program_id);
     return res;
   };
-  return { storeBoard };
+
+  const makeMove = async (mines: JsInput[]) => {
+    if (!program_id) return;
+    const res = await compute(nillion, client, [], program_id);
+  };
+
+  return { storeBoard, makeMove };
 };
 
 export default useGame;

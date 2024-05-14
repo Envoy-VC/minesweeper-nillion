@@ -4,6 +4,7 @@ import Image from 'next/image';
 
 import React from 'react';
 
+import { getRandomMineLocations } from '~/lib/helpers';
 import { useGame } from '~/lib/hooks';
 
 import { useMap } from 'usehooks-ts';
@@ -12,6 +13,7 @@ import { TILES } from '~/assets';
 
 import { AlertDialog, AlertDialogContent } from '~/components/ui/alert-dialog';
 
+import { Shuffle } from 'lucide-react';
 import { Copy } from 'lucide-react';
 
 import type { JsInput } from '~/types/nillion';
@@ -122,7 +124,22 @@ const CreateBoard = () => {
             </div>
           ))}
       </div>
-      <div className='flex flex-col items-center justify-center gap-1'>
+      <div className='relative flex flex-col items-center justify-center gap-1'>
+        <div className='absolute right-0 top-1/2 -translate-y-1/2'>
+          <div className='title-bar-controls'>
+            <button
+              className='m-0 h-5 w-5 p-0'
+              onClick={() => {
+                const mines = getRandomMineLocations();
+                actions.reset();
+                setRemaining(0);
+                mines.forEach((mine) => actions.set(mine, true));
+              }}
+            >
+              <Shuffle className='mx-auto text-black' size={12} />
+            </button>
+          </div>
+        </div>
         <button
           className='mx-auto w-fit px-4 py-1 text-base font-medium'
           onClick={onCreate}
