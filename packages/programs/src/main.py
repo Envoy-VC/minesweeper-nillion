@@ -116,13 +116,13 @@ def nada_main():
             board[i].append(SecretInteger(
                 Input(name="board-" + str(i) + "-" + str(j), party=party2)))
 
-    # for i in range(BOARD_SIZE):
-    #     x, y = -1, -1
-    #     if (mine_locations[i][0] == SecretInteger(i + 1)):
-    #         x = i
-    #     if (mine_locations[i][1] == SecretInteger(i + 1)):
-    #         y = i
-    #     mine_locations_int.append([x, y])
+    for i in range(BOARD_SIZE):
+        x, y = -1, -1
+        if (mine_locations[i][0] == SecretInteger(i + 1)):
+            x = i
+        if (mine_locations[i][1] == SecretInteger(i + 1)):
+            y = i
+        mine_locations_int.append([x, y])
 
     # Add Mines Location to Board
     for i in range(BOARD_SIZE):

@@ -4,29 +4,29 @@ inputs:
   secrets:
     board-1-0:
       SecretInteger: '3'
-    board-1-1:
-      SecretInteger: '3'
-    board-0-0:
-      SecretInteger: '3'
     board-1-2:
       SecretInteger: '3'
     board-0-2:
       SecretInteger: '3'
     board-0-1:
       SecretInteger: '3'
+    board-1-1:
+      SecretInteger: '3'
+    board-0-0:
+      SecretInteger: '3'
   public_variables: {}
 expected_outputs:
+  game_over:
+    Integer: '3'
   out-board-0-1:
     SecretInteger: '3'
   out-board-1-1:
     SecretInteger: '3'
+  out-board-0-2:
+    SecretInteger: '3'
   out-board-1-0:
     SecretInteger: '3'
   out-board-1-2:
-    SecretInteger: '3'
-  game_over:
-    Integer: '3'
-  out-board-0-2:
     SecretInteger: '3'
   out-board-0-0:
     SecretInteger: '3'
