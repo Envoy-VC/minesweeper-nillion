@@ -32,7 +32,11 @@ const useGame = () => {
 
   const makeMove = async (inputs: JsInput[]) => {
     if (!program_id) return;
-    const res = await compute(nillion, client, [], program_id, inputs);
+    const party2 = (
+      await getNillionClient(UserKey.from_seed('party2').to_base58())
+    ).nillionClient.party_id;
+    console.log('Party2: ', party2);
+    const res = await compute(nillion, client, [], program_id, party2, inputs);
     return res;
   };
 

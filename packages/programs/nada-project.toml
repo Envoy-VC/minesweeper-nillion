@@ -3,6 +3,6 @@ version = "0.1.0"
 authors = ["Vedant Chainani"]
 
 [[programs]]
-name = "minesweeper"
+name = "main"
 path = "src/main.py"
 prime_size = 128

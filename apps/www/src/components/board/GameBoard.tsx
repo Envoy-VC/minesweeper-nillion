@@ -4,6 +4,7 @@ import Image from 'next/image';
 
 import React from 'react';
 
+import { getBoardInputs, getMinesInputs } from '~/lib/helpers';
 import { useGame } from '~/lib/hooks';
 import { useGameStore } from '~/lib/stores';
 
@@ -11,42 +12,33 @@ import { TILES } from '~/assets';
 
 import type { JsInput } from '~/types/nillion';
 
-const GameBoard = () => {
+interface Props {
+  mines: [number, number][];
+}
+
+const GameBoard = ({ mines }: Props) => {
   const { board } = useGameStore();
   const { makeMove } = useGame();
-
-  const getBoardInputs = () => {
-    const inputs: JsInput[] = [];
-    for (let i = 0; i < 24; i++) {
-      for (let j = 0; j < 24; j++) {
-        const value = String(board[i]![j]!);
-        inputs.push({
-          name: `board-${i}-${j}`,
-          value,
-        });
-      }
-    }
-
-    return inputs;
-  };
 
   const play = async (row: number, col: number) => {
     try {
       const inputs: JsInput[] = [];
-      const boardInputs = getBoardInputs();
-      inputs.push(...boardInputs);
+      const boardInputs = getBoardInputs(board);
+      const minesInputs = getMinesInputs(mines);
+      inputs.push(...boardInputs, ...minesInputs);
       inputs.push({
         name: `location-0`,
-        value: String(row),
+        value: String(row + 1),
       });
       inputs.push({
         name: `location-1`,
-        value: String(col),
+        value: String(col + 1),
       });
-
-      // TODO: Add Mines
-      await makeMove(inputs);
-    } catch (error) {}
+      const res = await makeMove(inputs);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -58,7 +50,14 @@ const GameBoard = () => {
               const type = ele;
               const key = `${rowIdx}-${colIdx}`;
               return (
-                <div className='cursor-pointer' key={`tile-${key}`}>
+                <div
+                  className='cursor-pointer'
+                  key={`tile-${key}`}
+                  onClick={async () => {
+                    console.log('Playing', rowIdx, colIdx);
+                    await play(rowIdx, colIdx);
+                  }}
+                >
                   <Image
                     src={TILES.default}
                     alt='Default Tile'

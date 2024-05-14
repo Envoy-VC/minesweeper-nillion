@@ -10,7 +10,7 @@ interface Props extends PropsWithChildren {}
 
 const GameWindow = ({ children }: Props) => {
   return (
-    <div className='flex h-fit w-fit flex-col rounded-md'>
+    <div className='flex h-full max-h-[50rem] w-full max-w-[40rem] flex-col rounded-md'>
       <div className='w-full rounded-t-lg bg-gradient-to-b from-[#2086FF]  via-[#0055E5]  to-[#0660F0] p-2'>
         <div className='flex flex-row items-center justify-between'>
           <div className='flex flex-row items-center gap-2'>

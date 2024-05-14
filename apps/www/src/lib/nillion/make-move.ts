@@ -7,6 +7,7 @@ const compute = async (
   nillionClient: any,
   store_ids: (string | null)[],
   program_id: string,
+  party2_id: string,
   computeTimeSecrets: JsInput[] = [],
   publicVariables: JsInput[] = []
 ): Promise<string> => {
@@ -16,13 +17,9 @@ const compute = async (
     // add input and output party details (name and party id) to program bindings
     const party1Name = 'Party1';
     const party2Name = 'Party2';
-    const party_id = nillionClient.party_id;
-    program_bindings.add_input_party(party1Name, party_id);
-    program_bindings.add_output_party(party2Name, party_id);
-
-    console.log('program_bindings', program_bindings);
-    console.log('party_id', party_id);
-    console.log('store_ids', store_ids);
+    const party1_id = nillionClient.party_id;
+    program_bindings.add_input_party(party1Name, party1_id);
+    program_bindings.add_output_party(party2Name, party2_id);
 
     // create a compute time secrets object
     const compute_time_secrets = new nillion.Secrets();
@@ -54,6 +51,8 @@ const compute = async (
       compute_time_secrets,
       public_variables
     );
+
+    console.log(compute_result_uuid);
 
     const compute_result =
       await nillionClient.compute_result(compute_result_uuid);

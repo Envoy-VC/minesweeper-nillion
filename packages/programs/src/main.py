@@ -4,11 +4,11 @@ from nada_dsl import *
 """
 Output will be a full board of numbers(576) with each tile having values.
 
-0/1           |  Game Over
+-1/1           |  Game Over
 -1            |  Untouched Tile
-0 - 8         |  No of Adjacent Mines
-9             |  Mine
-10            |  Flag
+1 - 8         |  No of Adjacent Mines
+10             |  Mine
+11            |  Flag
 
 
 
@@ -28,15 +28,18 @@ S.W--> South-West   (row+1, col-1)
 """
 
 
+BOARD_SIZE = 16
+
+
 def is_valid(row: int, col: int) -> bool:
-    if row >= 0 and row < 24 and col >= 0 and col < 24:
+    if row >= 0 and row < BOARD_SIZE and col >= 0 and col < BOARD_SIZE:
         return True
     return False
 
 
 def is_mine(board: list[list[SecretInteger]], row: int, col: int) -> bool:
     ele: SecretInteger = board[row][col]
-    if ele == SecretInteger(9):
+    if ele == SecretInteger(10):
         return True
     return False
 
@@ -51,13 +54,13 @@ def count_adjacent_mines(board: list[list[SecretInteger]], row: int, col: int):
         if (is_valid(newRow, newCol)):
             if (is_mine(board, newRow, newCol)):
                 count += 1
-    return count
+    return count + 1
 
 
 def is_game_over(board: list[list[SecretInteger]]) -> bool:
     # game over if there is not tile with -1
-    for i in range(24):
-        for j in range(24):
+    for i in range(BOARD_SIZE):
+        for j in range(BOARD_SIZE):
             if board[i][j] == SecretInteger(-1):
                 return 0
     return 1
@@ -73,7 +76,7 @@ def make_move(board: list[list[SecretInteger]], row: int, col: int):
     board[row][col] = SecretInteger(mine_count)
 
     # Recursive Case
-    if (mine_count == 0):
+    if (mine_count == 1):
         # Recursive call for all adjacent
         dx = [-1, -1, -1, 0, 0, 1, 1, 1]
         dy = [-1, 0, 1, -1, 1, -1, 0, 1]
@@ -87,15 +90,6 @@ def make_move(board: list[list[SecretInteger]], row: int, col: int):
     return board
 
 
-def get_output_board(board: list[list[SecretInteger]], party: Party) -> list[Output]:
-    outputs: list[Output] = []
-    for i in range(23):
-        for j in range(23):
-            outputs.append(
-                Output(board[i][j], "board-" + str(i) + "-" + str(j), party))
-    return outputs
-
-
 def nada_main():
    # Party 1 places Mines
     party1 = Party(name="Party1")
@@ -107,61 +101,56 @@ def nada_main():
     mine_locations_int: list[list[int]] = []
     location: list[SecretInteger] = []
 
-    for i in range(24):
-        mine_locations.append([SecretInteger(-1), SecretInteger(-1)])
-        mine_locations_int.append([-1, -1])
-        board.append([SecretInteger(-1) for _ in range(24)])
-    for i in range(2):
-        location.append(SecretInteger(-1))
-
     # Take 24 Mine Locations by Party 1
-    for i in range(24):
-        mine_locations[i] = [
-            SecretInteger(Input(name="mine-x-" + str(i), party=party1)),
-            SecretInteger(Input(name="mine-y-" + str(i), party=party1))
-        ]
+    for i in range(BOARD_SIZE):
+        mine_locations.append([])
+        mine_locations_int.append([-1, -1])
+        mine_locations[i].append(SecretInteger(
+            Input(name="mine-x-" + str(i), party=party1)))
+        mine_locations[i].append(SecretInteger(
+            Input(name="mine-y-" + str(i), party=party1)))
 
-    for i in range(24):
+    for i in range(BOARD_SIZE):
         x, y = -1, -1
-        if (mine_locations[i][0].public_equals(SecretInteger(i))):
+        if (mine_locations[i][0] == SecretInteger(i + 1)):
             x = i
-        if (mine_locations[i][1].public_equals(SecretInteger(i))):
+        if (mine_locations[i][1] == SecretInteger(i + 1)):
             y = i
         mine_locations_int.append([x, y])
 
     # Take Board from Party 2
-    for i in range(24):
-        for j in range(24):
-            # 2d array
-            board[i][j] = SecretInteger(
-                Input(name=f"board-{i}-{j}", party=party2))
+    for i in range(BOARD_SIZE):
+        board.append([])
+        for j in range(BOARD_SIZE):
+            board[i].append(SecretInteger(
+                Input(name="board-" + str(i) + "-" + str(j), party=party1)))
 
     # Add Mines Location to Board
-    for i in range(24):
+    for i in range(BOARD_SIZE):
         [mine_x, mine_y] = mine_locations_int[i]
-        board[mine_x][mine_y] = SecretInteger(9)
+        board[mine_x][mine_y] = SecretInteger(10)
 
     # Take Input Location from Party 2
     for i in range(2):
-        location[i] = SecretInteger(
-            Input(name=f"location-{i}", party=party2))
+        location.append(SecretInteger(
+            Input(name=f"location-{i}", party=party2)))
 
     x, y = -1, -1
-    for i in range(24):
-        if (location[0].public_equals(SecretInteger(i))):
+    for i in range(BOARD_SIZE):
+        if (location[0] == SecretInteger(i + 1)):
             x = i
-        if (location[1].public_equals(SecretInteger(i))):
+        if (location[1] == SecretInteger(i + 1)):
             y = i
 
-    did_hit_mine = is_mine(board, x, y)
+    updated_board = make_move(board, x, y)
+    game_over = is_game_over(updated_board)
+    outputs: list[Output] = [
+        Output(Integer(game_over), "game_over", party1)
+    ]
 
-    if (did_hit_mine):
-        outputs: list[Output] = get_output_board(board, party2)
-        outputs.append(Output(Integer(1), "game_over", party1))
-        return outputs
-    else:
-        updated_board = make_move(board, x, y)
-        game_over = is_game_over(updated_board)
-        outputs: list[Output] = get_output_board(updated_board, party2)
-        outputs.append(Output(Integer(game_over), "game_over", party1))
-        return outputs
+    for i in range(BOARD_SIZE - 1):
+        for j in range(BOARD_SIZE):
+            outputs.append(
+                Output(updated_board[i][j], "out-board-" + str(i) + "-" + str(j), party1))
+
+    return outputs

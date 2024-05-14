@@ -1,3 +1,7 @@
+import { TILE_TYPE } from '~/types';
+
+import type { JsInput } from '~/types/nillion';
+
 export const getRandomMineLocations = () => {
   const mines: string[] = [];
 
@@ -15,4 +19,36 @@ export const getRandomMineLocations = () => {
   }
 
   return mines;
+};
+
+export const getBoardInputs = (board: TILE_TYPE[][]) => {
+  const inputs: JsInput[] = [];
+  for (let i = 0; i < 24; i++) {
+    for (let j = 0; j < 24; j++) {
+      const value = String(board[i]![j]!);
+      inputs.push({
+        name: `board-${i}-${j}`,
+        value,
+      });
+    }
+  }
+
+  return inputs;
+};
+
+export const getMinesInputs = (mines: [number, number][]) => {
+  const inputs: JsInput[] = [];
+  for (let i = 0; i < mines.length; i++) {
+    const [row, col] = mines[i] as [number, number];
+    inputs.push({
+      name: `mine-x-${i}`,
+      value: String(row),
+    });
+    inputs.push({
+      name: `mine-y-${i}`,
+      value: String(col),
+    });
+  }
+
+  return inputs;
 };
