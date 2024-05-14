@@ -15,7 +15,6 @@ const storeProgram = async (nillionClient: any, programName: string) => {
 
     const userId = nillionClient.user_id as string;
     const programId = `${userId}/${programName}`;
-    console.log(programId);
     return programId;
   } catch (error) {
     console.log(error);

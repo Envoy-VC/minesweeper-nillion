@@ -53,8 +53,6 @@ const compute = async (
       public_variables
     );
 
-    console.log(compute_result_uuid);
-
     const compute_result =
       await nillionClient.compute_result(compute_result_uuid);
 

@@ -16,7 +16,6 @@ const useGame = () => {
     const admin = (
       await getNillionClient(UserKey.from_seed('admin').to_base58())
     ).nillionClient.user_id;
-    console.log('Admin: ' + admin);
     const res = await storeMines(
       nillion,
       client,
@@ -35,7 +34,6 @@ const useGame = () => {
     const party2 = (
       await getNillionClient(UserKey.from_seed('party2').to_base58())
     ).nillionClient.party_id;
-    console.log('Party2: ', party2);
     const res = await compute(nillion, client, [], program_id, party2, inputs);
     return res;
   };

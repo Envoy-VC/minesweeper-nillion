@@ -35,9 +35,6 @@ const GameBoard = ({ mines }: Props) => {
         name: `location-1`,
         value: String(col + 1),
       });
-      console.log({
-        inputs,
-      });
       const res = await makeMove(inputs);
       console.log(res);
     } catch (error) {
