@@ -17,9 +17,9 @@ const useNillion = () => {
     refetch,
   } = useQuery({
     queryKey: ['nillion_snap'],
+    enabled: false,
     queryFn: async () => {
       const data = await connectAsync();
-
       if (data.user_key) {
         const { nillion, nillionClient } = await getNillionClient(
           data.user_key
