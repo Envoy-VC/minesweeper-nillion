@@ -30,7 +30,7 @@ export const useGameStore = create<State & Actions>((set, get) => ({
   gameEnded: false,
   gameLost: false,
   currentMoveCount: ['0', '0', '0'],
-  tilesLeft: ['5', '5', '2'],
+  tilesLeft: ['5', '0', '1'],
   flags: [],
   setBoard: (board) => set({ board }),
   setTile: (tile, row, col) => {
@@ -69,7 +69,7 @@ export const useGameStore = create<State & Actions>((set, get) => ({
       gameEnded: false,
       gameLost: false,
       currentMoveCount: ['0', '0', '0'],
-      tilesLeft: ['5', '5', '2'],
+      tilesLeft: ['5', '0', '1'],
     });
   },
   setFlag: (flag) => {

@@ -1,6 +1,7 @@
 from nada_dsl import *
 
 BOARD_SIZE = 24
+NUM_MINES = 75
 
 valid = Integer(1)
 invalid = Integer(0)
@@ -79,7 +80,7 @@ def nada_main():
     location: list[SecretInteger] = []
 
     # Take Mine Locations from Party 1
-    for i in range(BOARD_SIZE):
+    for i in range(NUM_MINES):
         mine_locations.append([])
         mine_locations[i].append(SecretInteger(
             Input(name="mine-x-" + str(i), party=party1)))

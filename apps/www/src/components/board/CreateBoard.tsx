@@ -20,7 +20,7 @@ import type { JsInput } from '~/types/nillion';
 
 const BOARD_ROWS = 24;
 const BOARD_COLS = 24;
-const MINES_COUNT = 24;
+const MINES_COUNT = 75;
 
 const CreateBoard = () => {
   const [, copy] = useCopyToClipboard();

@@ -7,7 +7,7 @@ export const getRandomMineLocations = () => {
   const mines: string[] = [];
 
   const taken = new Map<string, boolean>();
-  while (mines.length < 24) {
+  while (mines.length < 75) {
     const array = new Uint32Array(10);
     const bytes = crypto.getRandomValues(array);
     const randomX = bytes[0]! % 24;
@@ -128,7 +128,7 @@ export const getTilesLeft = (board: TILE_TYPE[][]) => {
     }
   }
 
-  return count - 24;
+  return count - 75;
 };
 
 export const getTileImage = (tile: TILE_TYPE) => {

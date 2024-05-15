@@ -11,7 +11,7 @@ const getMines = async (store_id: string) => {
   const nillionClient = libraries.nillionClient;
 
   const mines: [number, number][] = [];
-  for (let i = 0; i < 24; i++) {
+  for (let i = 0; i < 75; i++) {
     const mineX = (
       await nillionClient.retrieve_secret(
         nillionConfig.cluster_id,
