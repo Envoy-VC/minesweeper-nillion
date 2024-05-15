@@ -20,6 +20,7 @@ const config = {
     extend: {
       fontFamily: {
         sans: ['var(--font-geist-sans)'],
+        digital: ['var(-font-digital)'],
       },
       colors: {
         border: 'var(--border)',

@@ -2,6 +2,11 @@ import { nillionConfig } from './config';
 
 import type { JsInput } from '~/types/nillion';
 
+export interface ComputeResult {
+  adjacent_mines?: string;
+  game_over?: string;
+}
+
 const compute = async (
   nillion: any,
   nillionClient: any,
@@ -10,7 +15,7 @@ const compute = async (
   party2_id: string,
   computeTimeSecrets: JsInput[] = [],
   publicVariables: JsInput[] = []
-): Promise<string> => {
+): Promise<ComputeResult> => {
   try {
     const program_bindings = new nillion.ProgramBindings(program_id);
 
@@ -53,13 +58,20 @@ const compute = async (
       public_variables
     );
 
-    const compute_result =
-      await nillionClient.compute_result(compute_result_uuid);
+    const compute_result = (await nillionClient.compute_result(
+      compute_result_uuid
+    )) as object;
 
-    return compute_result;
+    const result: ComputeResult = {};
+
+    Object.entries(compute_result).map(([k, v]) => {
+      result[k as keyof ComputeResult] = v.toString();
+    });
+
+    return result as ComputeResult;
   } catch (error: any) {
     console.log('error', error);
-    return 'error';
+    return {};
   }
 };
 
