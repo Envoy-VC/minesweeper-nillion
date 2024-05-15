@@ -121,7 +121,8 @@ export const getTilesLeft = (board: TILE_TYPE[][]) => {
   let count = 0;
   for (let i = 0; i < 24; i++) {
     for (let j = 0; j < 24; j++) {
-      if (board[i]![j] === TILE_TYPE.UNTOUCHED) {
+      const type = board[i]![j]!;
+      if (type === TILE_TYPE.UNTOUCHED) {
         count++;
       }
     }
@@ -152,8 +153,6 @@ export const getTileImage = (tile: TILE_TYPE) => {
       return TILES.seven;
     case TILE_TYPE.EIGHT:
       return TILES.eight;
-    case TILE_TYPE.FLAG:
-      return TILES.flag;
     case TILE_TYPE.MINE:
       return TILES.mine;
     case TILE_TYPE.RED_MINE:

@@ -7,6 +7,7 @@ interface State {
   gameLost: boolean;
   gameEnded: boolean;
   board: TILE_TYPE[][];
+  flags: string[];
 }
 
 interface Actions {
@@ -15,6 +16,7 @@ interface Actions {
   setTiles(data: { type: TILE_TYPE; row: number; column: number }[]): void;
   setBoard(board: TILE_TYPE[][]): void;
   setTilesLeft(num: number): void;
+  setFlag(flag: string): void;
   incMoves(): void;
   reset(): void;
 }
@@ -29,13 +31,14 @@ export const useGameStore = create<State & Actions>((set, get) => ({
   gameLost: false,
   currentMoveCount: ['0', '0', '0'],
   tilesLeft: ['5', '5', '2'],
+  flags: [],
   setBoard: (board) => set({ board }),
-  setTile: (tile, row, col) =>
-    set((state) => {
-      const newBoard = state.board;
-      newBoard[row]![col]! = tile;
-      return { board: newBoard };
-    }),
+  setTile: (tile, row, col) => {
+    const current = get().board;
+    let newBoard: TILE_TYPE[][] = current.map((row) => [...row]);
+    newBoard[row]![col]! = tile;
+    set({ board: newBoard });
+  },
   setTiles: (data) =>
     set((state) => {
       const newBoard = state.board;
@@ -68,5 +71,14 @@ export const useGameStore = create<State & Actions>((set, get) => ({
       currentMoveCount: ['0', '0', '0'],
       tilesLeft: ['5', '5', '2'],
     });
+  },
+  setFlag: (flag) => {
+    const current = get().flags;
+    if (current.includes(flag)) {
+      const newFlags = current.filter((f) => f !== flag);
+      set({ flags: newFlags });
+    } else {
+      set({ flags: [...current, flag] });
+    }
   },
 }));
