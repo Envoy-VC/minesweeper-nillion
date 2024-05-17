@@ -5,7 +5,7 @@
   "main": "src/man.py",
   "scripts": {
     "start-devnet": "bash ./start-devnet.sh",
-    "create-venv": "bash ./create-venv.sh"
+    "create-venv": "bash ./create-venv.sh && source .venv/bin/activate"
   },
   "keywords": [],
   "author": "",
