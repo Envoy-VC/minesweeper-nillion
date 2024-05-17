@@ -1,5 +1,5 @@
-<p style="display: flex; justify-content: center;">
-<img src="./apps/www/src/assets/logo-text.png" alt="Minesweeper Logo"  width="300px"/></p>
+<p align="center">
+<img src="./apps/www/src/assets/logo-text.png" alt="Minesweeper Logo"  width="500px"/></p>
 
 This is a simple implementation of the classic game Minesweeper using Nillion Blind Computation.
 
