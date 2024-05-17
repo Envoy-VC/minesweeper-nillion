@@ -70,6 +70,7 @@ export const useGameStore = create<State & Actions>((set, get) => ({
       gameLost: false,
       currentMoveCount: ['0', '0', '0'],
       tilesLeft: ['5', '0', '1'],
+      flags: [],
     });
   },
   setFlag: (flag) => {
