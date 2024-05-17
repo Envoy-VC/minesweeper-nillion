@@ -12,8 +12,8 @@ dy = [Integer(-1), Integer(0), Integer(1), Integer(-1),
       Integer(1), Integer(-1), Integer(0), Integer(1)]
 
 
-def is_equal(a: SecretInteger, b: SecretInteger) -> SecretInteger:
-    return (a > b).if_else(invalid, (a < b).if_else(invalid, valid))
+def is_equal(a, b):
+    return (a > b).if_else((a < b).if_else(invalid, invalid), valid)
 
 
 def is_mine(
@@ -22,18 +22,18 @@ def is_mine(
 ) -> SecretInteger:
     result = Integer(-1)
     for mine in mine_locations:
-        actual = (mine[0] * Integer(100) + mine[1])
-        given = (row * Integer(100) + col)
-        result = result * (actual - given)
+        row_eq = is_equal(row, mine[0])
+        col_eq = is_equal(col, mine[1])
+        result = result * (row_eq * col_eq - Integer(1))
 
     res = is_equal(result, Integer(0))
     return res
 
 
 def is_valid(row: SecretInteger, col: SecretInteger) -> SecretInteger:
-    valid_row_max = row <= Integer(BOARD_SIZE)
+    valid_row_max = row < Integer(BOARD_SIZE)
     valid_row_min = row > Integer(0)
-    valid_col_max = col <= Integer(BOARD_SIZE)
+    valid_col_max = col < Integer(BOARD_SIZE)
     valid_col_min = col > Integer(0)
 
     cmp_row_max = valid_row_max.if_else(valid, invalid)
