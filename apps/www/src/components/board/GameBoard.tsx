@@ -79,8 +79,8 @@ const GameBoard = ({ mines }: Props) => {
           value: String(col + 1),
         });
         const res = await makeMove(inputs);
-        console.log(res);
         if (!res) throw new Error('Error making move');
+        console.log(res);
         if (res.game_over === '1') {
           setTile(TILE_TYPE.RED_MINE, row, col);
           setResult(true, true);
@@ -141,7 +141,7 @@ const GameBoard = ({ mines }: Props) => {
                   }}
                 >
                   <Image
-                    src={isFlag ? TILES.flag : getTileImage(_)}
+                    src={getTileImage(_, isFlag)}
                     alt='Tile'
                     className='pointer-events-none h-[24px] w-[24px]'
                   />

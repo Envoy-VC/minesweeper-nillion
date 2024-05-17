@@ -3,17 +3,33 @@ import { TILE_TYPE } from '~/types';
 
 import type { JsInput } from '~/types/nillion';
 
+const dx = [-1, -1, -1, 0, 0, 1, 1, 1];
+const dy = [-1, 0, 1, -1, 1, -1, 0, 1];
+
 export const getRandomMineLocations = () => {
   const mines: string[] = [];
-
   const taken = new Map<string, boolean>();
+
+  const isAdjacent = (x: number, y: number) => {
+    for (let i = 0; i < 8; i++) {
+      const r = x + dx[i]!;
+      const c = y + dy[i]!;
+      const key = `${r}-${c}`;
+      if (taken.has(key)) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
   while (mines.length < 75) {
     const array = new Uint32Array(10);
     const bytes = crypto.getRandomValues(array);
     const randomX = bytes[0]! % 24;
     const randomY = bytes[1]! % 24;
     const key = `${randomX}-${randomY}`;
-    if (!taken.has(key)) {
+    if (!taken.has(key) && !isAdjacent(randomX, randomY)) {
       mines.push(key);
       taken.set(key, true);
     }
@@ -67,9 +83,6 @@ const countAdjacentMines = (
   mines: [number, number][],
   pos: [number, number]
 ) => {
-  const dx = [-1, -1, -1, 0, 0, 1, 1, 1];
-  const dy = [-1, 0, 1, -1, 1, -1, 0, 1];
-
   let count = 0;
   for (let i = 0; i < 8; i++) {
     const newRow = pos[0] + dx[i]!;
@@ -99,8 +112,6 @@ export const getUpdatedBoard = (
   updatedBoard![row]![col] = count + 1;
 
   if (count === 0) {
-    const dx = [-1, -1, -1, 0, 0, 1, 1, 1];
-    const dy = [-1, 0, 1, -1, 1, -1, 0, 1];
     for (let i = 0; i < 8; i++) {
       const newRow = row + dx[i]!;
       const newCol = col + dy[i]!;
@@ -131,7 +142,10 @@ export const getTilesLeft = (board: TILE_TYPE[][]) => {
   return count - 75;
 };
 
-export const getTileImage = (tile: TILE_TYPE) => {
+export const getTileImage = (tile: TILE_TYPE, isFlag: boolean) => {
+  if (isFlag) {
+    return TILES.flag;
+  }
   switch (tile) {
     case TILE_TYPE.UNTOUCHED:
       return TILES.default;

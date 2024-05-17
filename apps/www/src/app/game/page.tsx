@@ -21,7 +21,6 @@ const GamePage = () => {
       const res = await getMines(id);
       if (!res) throw new Error('No board found');
       setMines(res);
-      console.log(res);
       return res;
     } catch (error) {
       setError((error as Error).message);
