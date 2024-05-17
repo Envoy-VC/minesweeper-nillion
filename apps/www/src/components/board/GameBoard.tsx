@@ -80,7 +80,6 @@ const GameBoard = ({ mines }: Props) => {
         });
         const res = await makeMove(inputs);
         if (!res) throw new Error('Error making move');
-        console.log(res);
         if (res.game_over === '1') {
           setTile(TILE_TYPE.RED_MINE, row, col);
           setResult(true, true);
