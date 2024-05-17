@@ -50,6 +50,10 @@ Before starting the game, make sure you have Metamask Flask installed and Nillio
 
 ## Demo Video 🎥
 
+https://www.youtube.com/watch?v=sRLVX6E1iUQ
+
+[![Demo Video](https://img.youtube.com/vi/sRLVX6E1iUQ/0.jpg)](https://www.youtube.com/watch?v=sRLVX6E1iUQ)
+
 ## How it works 🛠️
 
 The game is implemented using Nillion Blind Computation. The game is divided into two parts, the frontend and the nada programs.
